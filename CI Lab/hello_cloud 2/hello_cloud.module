@@ -1,0 +1,42 @@
+<?php
+/**
+ * @file
+ * Simple example module which adds a static page & simple functionality
+ * used for testing cloud functionality / workflows
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function hello_cloud_menu() {
+  $items = array();
+  $items['hello-cloud'] = array(
+    'title' => 'Hello Cloud',
+    'description' => 'Say Hello To Cloud',
+    'page callback' => 'hello_cloud_page',
+    'access arguments' => array('access content'),
+    'menu_name' => 'main-menu',
+  );
+  return $items;
+}
+
+function hello_cloud_page() {
+$output = 'Say Hello to the Cloud!!';
+$output .= hello_cloud_list_users();
+return $output; 
+}
+
+function hello_cloud_list_users (){
+$result = db_query("SELECT * FROM {users} where uid<>0")->fetchAll();
+  foreach ($result as $value) {
+    $account = $value->uid ? user_load($value->uid) : '';
+    $rows[] = array(
+      $value->uid ? theme('username', array('account' => $account)) : '',
+    );
+    }
+  $header = array(
+   'Others Saying Hello!',
+  );
+  $output = theme('table', array('header' => $header, 'rows' => $rows));
+  return $output;
+}

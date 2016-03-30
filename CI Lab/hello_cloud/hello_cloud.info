@@ -1,0 +1,3 @@
+name = Hello Cloud
+description = Simple module for testing Cloud functionality
+core = 7.x
